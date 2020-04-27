@@ -1,14 +1,17 @@
 - name: install_dependencies
-  tag: master
+  service: app
   command: cd codeship-tutorial && npm install
 
 - name: build_application
+  service: app
   command: cd codeship-tutorial && npm run build
 
 - name: test_application
+  service: app
   command: cd codeship-tutorial && npm run build
 
 - type: manual
+  service: app
   steps:
     - name: requires-approval
       command: cd codeship-tutorial && ./deploy.sh
