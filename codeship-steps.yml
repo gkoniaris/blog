@@ -2,11 +2,13 @@
   tag: master
   command: cd codeship-tutorial && npm install
 
-- name: build_applications
+- name: build_application
+  command: cd codeship-tutorial && npm run build
+
+- name: test_application
   command: cd codeship-tutorial && npm run build
 
 - type: manual
   steps:
-    - service: app
-      name: requires-approval
-      command: node -v
+    - name: requires-approval
+      command: cd codeship-tutorial && ./deploy.sh
