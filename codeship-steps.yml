@@ -1,0 +1,12 @@
+- name: install_dependencies
+  tag: master
+  command: cd codeship-tutorial && npm install
+
+- name: build_applications
+  command: cd codeship-tutorial && npm run build
+
+- type: manual
+  steps:
+    - service: app
+      name: requires-approval
+      command: node -v
