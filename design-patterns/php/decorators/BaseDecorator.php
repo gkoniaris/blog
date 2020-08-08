@@ -10,13 +10,26 @@ abstract class BaseDecorator
         $this->{$key} = $object;
     }
 
+    protected function getOriginal()
+    {
+        $original = $this->{$this->key};
+        
+        if (is_a($original, 'BaseDecorator')) {
+            return $original->getOriginal();
+        }
+
+        return $original;
+    }
+
     /**
      * Allows us to retrieve properties in the parent object
      */
     public function __get($property)
     {
-        if (property_exists($this->{$this->key}, $property)) {
-            return $this->{$this->key}->{$property};
+        $originalObject = $this->getOriginal();
+
+        if (property_exists($originalObject, $property)) {
+            return $originalObject->{$property};
         }
 
         throw new \Exception('Property ' . $property . ' does not exist in class ' . get_class($this));
@@ -27,7 +40,9 @@ abstract class BaseDecorator
      */
     public function __set($property, $value)
     {
-        $this->{$this->key}->{$property} = $value;
+        $originalObject = $this->getOriginal();
+
+        $originalObject->{$property} = $value;
     }
 
     /**
@@ -36,8 +51,10 @@ abstract class BaseDecorator
      */
     public function __call($method, $args)
     {
-        if (is_callable([$this->{$this->key}, $method])) {
-            return $this->{$this->key}->{$method}($args);
+        $originalObject = $this->getOriginal();
+
+        if (is_callable([originalObject, $method])) {
+            return $originalObject->{$method}($args);
         }
 
         throw new \Exception('Method ' . $method . ' does not exist in class ' . get_class($this->{$this->key}));
