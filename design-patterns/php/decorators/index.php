@@ -5,6 +5,7 @@ require_once('./BaseDecorator.php');
 require_once('./ProductToBeDecorated.php');
 require_once('./VatDecorator.php');
 require_once('./ShippingDecorator.php');
+require_once('./DecoratorBuilder.php');
 
 $sandwich = new Product('Sandwich', 'food', 200, 3.5);
 
@@ -16,4 +17,12 @@ $tomatoes = new VatDecorator($tomatoes);
 $tomatoes = new ShippingDecorator($tomatoes);
 
 echo ($tomatoes->price());
+echo ("\n");
+
+$potatoes = new DecoratorBuilder(new ProductToBeDecorated('Potatoes', 'food', 5000, 3.5));
+$potatoes = $potatoes
+            ->applyDecorator(VatDecorator::class)
+            ->applyDecorator(ShippingDecorator::class);
+
+echo ($potatoes->price());
 echo ("\n");

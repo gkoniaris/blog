@@ -2,18 +2,18 @@
 
 class VatDecorator extends BaseDecorator
 {
-    protected $product;
+    protected $entity;
 
-    public function __construct($product)
+    public function __construct($entity)
     {
-        parent::__construct('product', $product);
+        parent::__construct($entity);
     }
 
     public function price()
     {
         $vatPercentage = null;
 
-        switch($this->product->type)
+        switch($this->entity->type)
         {
             case 'service':
                 $vatPercentage = 0.13; // Reduced VAT for services
@@ -25,7 +25,7 @@ class VatDecorator extends BaseDecorator
                 $vatPercentage = 0.24; // All other products have a 24% VAT
         }
 
-        $price = $this->product->price() * (1 + $vatPercentage);
+        $price = $this->entity->price() * (1 + $vatPercentage);
         
         return $price;
     }

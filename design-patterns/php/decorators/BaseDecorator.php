@@ -4,15 +4,14 @@ abstract class BaseDecorator
 {
     private $key;
 
-    public function __construct($key, $object)
+    public function __construct($object)
     {
-        $this->key = $key;
-        $this->{$key} = $object;
+        $this->entity = $object;
     }
 
     protected function getOriginal()
     {
-        $original = $this->{$this->key};
+        $original = $this->entity;
         
         if (is_a($original, 'BaseDecorator')) {
             return $original->getOriginal();
@@ -53,10 +52,21 @@ abstract class BaseDecorator
     {
         $originalObject = $this->getOriginal();
 
-        if (is_callable([originalObject, $method])) {
+        if (is_callable([$originalObject, $method])) {
             return $originalObject->{$method}($args);
         }
 
-        throw new \Exception('Method ' . $method . ' does not exist in class ' . get_class($this->{$this->key}));
+        throw new \Exception('Method ' . $method . ' does not exist in class ' . get_class($this->entity));
+    }
+
+    public function applyDecorator($decoratorClass)
+    {
+        $arguments = func_get_args();
+
+        array_shift($arguments);
+
+        $decoratorInstance = new $decoratorClass($this, ...$arguments);
+
+        return $decoratorInstance;
     }
 }
