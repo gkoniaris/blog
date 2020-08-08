@@ -17,11 +17,6 @@ class ProductToBeDecorated
         return $this->price;
     }
 
-    public function test()
-    {
-        print('hallo');
-    }
-
     public function __get($property)
     {
         if (property_exists($this, $property)) {
