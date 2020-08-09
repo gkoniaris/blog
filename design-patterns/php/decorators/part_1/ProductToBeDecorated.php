@@ -2,7 +2,7 @@
 
 class ProductToBeDecorated
 {
-    public $name, $type, $weight, $price;
+    protected $name, $type, $weight, $price;
 
     public function __construct($name, $type, $weight, $price)
     {
@@ -15,5 +15,15 @@ class ProductToBeDecorated
     public function price()
     {       
         return $this->price;
+    }
+
+    
+    public function __get($property)
+    {
+        if (property_exists($this, $property)) {
+            return $this->{$property};
+        }
+
+        throw new \Exception('Property ' . $property . ' does not exist in class ' . get_class($this));
     }
 }
