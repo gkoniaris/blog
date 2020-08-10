@@ -1,13 +1,15 @@
 <?php
-require_once('./dependencies.php');
+require_once('./Car.php');
+require_once('./EngineConversionDecorator.php');
+require_once('./WeightReductionDecorator.php');
+require_once('./SoundSystemDecorator.php');
 
-$sandwich = new Product('Sandwich', 'food', 200, 3.5);
+$car = new Car('Prius', 'normal');
+$car = new EngineConversionDecorator($car, 1);
+$car = new WeightReductionDecorator($car, 2);
+$car = new SoundSystemDecorator($car);
 
-echo ($sandwich->price());
+echo ($car->price());
 echo ("\n");
+echo ($car->maxSpeed());
 
-$tomatoes = new ProductToBeDecorated('Tomatoes', 'food', 5000, 7.5);
-$tomatoes = new VatDecorator($tomatoes);
-
-echo ($tomatoes->price());
-echo ("\n");
